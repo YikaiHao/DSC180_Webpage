@@ -113,7 +113,7 @@ For the probability of random walks, there are three types of probability. For e
 
 Similar to Word2Vec, we also plot out the vector embeddings after finishing the dimension reduction. The plot we get is shown below:
 
-![node2vec](img/nod2vec.png)
+![node2vec](img/node2vec.png)
 
 ### Metapath2Vec
 
