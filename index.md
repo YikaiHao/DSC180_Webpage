@@ -23,7 +23,7 @@ In order to understand which part of the smali files do the malicious action, we
 We design a new database for storing data.
 ![database](img/database.png)
 
-###Data Statistics
+### Data Statistics
 After picking out the features we want, we do some simple analysis based on the data we have. As the table shows, the size difference between malwares and benigns are huge. In addition, the unique api calls in benigns are about 10 times larger than malwares. Therefore, the difference between malwares and benigns do exists and we are able to find some way to detect malwares.
 
 | Type    | API called once (sum/app) | Number of API | Number of Class | Number of Application |
