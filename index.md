@@ -23,6 +23,11 @@ We design a new database for storing data.
 ### Feature Distribution
 In order to check whether the features we generate are useful for checking malwares, some Exploratory Data Analysis (EDA) has done on features. We check the difference between unique values among features considered the type of applications. The result shows that our features can clearly identify the different types of applications since the value between different types of applications are large. 
 
+| Type | #Unique API | #Unique API Lib | #Unique API Name | #Unique API Return Type |
+|----------|-----------|----------|-----------|-------|
+| Malware | 792.08       | 277.34   | 359.55    | 172.18   |
+| Benign | 7041.15   | 2551.21   | 2571.26    | 1485.79   |
+
 As we can see from the graphs, the distribution of every application type for every feature is different.
 
 ### Hindroid 
