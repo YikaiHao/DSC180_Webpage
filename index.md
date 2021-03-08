@@ -43,7 +43,7 @@ In order to check whether the features we generate are useful for checking malwa
 
 As we can see from the graphs, the distribution of every application type for every feature is different.
 
-| # of Unique API Lib + API Name | # of Unique API Lib | # of Unique API Name | # of Unique API Return Type | 
+| # of Unique API Call| # of Unique API Lib | # of Unique API Name | # of Unique API Return Type | 
 |:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|
 |![log_unique_api](img/log_unique_api.png)|![log_unique_api_lib](img/log_unique_api_lib.png)|![log_unique_api_name](img/log_unique_api_name.png)|![log_unique_return](img/log_unique_return.png)|
 
