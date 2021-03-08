@@ -43,7 +43,9 @@ In order to check whether the features we generate are useful for checking malwa
 
 As we can see from the graphs, the distribution of every application type for every feature is different.
 
-![log_scale](img/log_scale.png)
+| # of Unique API Lib + API Name | # of Unique API Lib | # of Unique API Name | # of Unique API Return Type | 
+|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|
+|![log_unique_api](img/log_unique_api.png)|![log_unique_api_lib](img/log_unique_api_lib.png)|![log_unique_api_name](img/log_unique_api_name.png)|![log_scale](img/log_scale.png)|
 
 ### Hindroid 
 HinDroid is the baseline model we use for our report. It contains different types of kernels and the meaning behind each kernel is different. It uses the features we extract from the data generating process to build some matrices. Each matrix shows a type of relationship between apis or applications. Each matrix is an adjacent matrix for a graph with a specialized relationship. By choosing different types of matrices we want to combine together, we get the kernel we have. Then we will be able to use the custom kernels and put in different classifiers like SVM or Random Forest for malware detection. 
