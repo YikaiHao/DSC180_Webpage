@@ -28,14 +28,6 @@ As we can see from the graphs, the distribution of every application type for ev
 ### Hindroid 
 HinDroid is the baseline model we use for our report. It contains different types of kernels and the meaning behind each kernel is different. It uses the features we extract from the data generating process to build some matrices. Each matrix shows a type of relationship between apis or applications. Each matrix is an adjacent matrix for a graph with a specialized relationship. By choosing different types of matrices we want to combine together, we get the kernel we have. Then we will be able to use the custom kernels and put in different classifiers like SVM or Random Forest for malware detection. 
 
-The four types of matrices are: A, B, P, and I matrices. 
-- A matrix shows the connection among apis and applications. The value within the A matrix will be one if the application contains the api.
-- B matrix shows the connection between apis. The value within the B matrix shows whether two apis are contained in the same code block.
-- P matrix also shows the connection between apis. The value within the P matrix shows whether two apis use the same package.
-- I matrix shows the connection within the apis. The value within the I matrix shows whether two apis use the same invoke type.
-
-Currently, due to the large size of the unique apis we get, we are not able to calculate out the I matrix yet. Therefore, the kernel we have now for HinDroid is AA^t, ABA^t, APA^t, and APBP^tA^t. 
-
 ### Word2Vec
 The HinDroid model runs pretty slow since there are a large number of APIs. However, lots of APIs only appear once among all applications and they are meaningless for detecting malwares. In addition, there are also some APIs which appeared in almost every application. Those APIs are also not meaningful enough to help us pick out the malwares. Therefore, new models are being considered and built. Based on the logic of HinDroid, we try to develop some new matrices to replace the original matrices which will have a faster speed and similar accuracy.
 
