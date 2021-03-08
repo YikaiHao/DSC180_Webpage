@@ -107,7 +107,7 @@ We use all A, B, and P matrices to build our Node2Vec. Since the B and P matrice
 
 For the probability of random walks, there are three types of probability. For example,from the graph below, we have a path from t -> v. When choosing the next step for v, we have three different probabilities. If we get from v -> t, we have a probability of 1/p. In addition, if the next node from v has a connection with t, then the probability of the node will be 1. Other nodes will have a probability with 1/q. We then implement sentences into the genism’s Node2Vec model. The p value we select in our Node2Vec is 1 and the q value we select is 1/2. We choose a larger p value since we do not want our path going back to its previous node.
 
-![node2vec_rule](img/node2vec_rule.png)
+![node2vec_rule](img/nod2vec_rule.png)
 
 Similar to Word2Vec, we also plot out the vector embeddings after finishing the dimension reduction. The plot we get is shown below:
 
