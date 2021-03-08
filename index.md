@@ -59,8 +59,10 @@ Currently, due to the large size of the unique apis we get, we are not able to c
 ### New Model
 The HinDroid model runs pretty slow since there are a large number of APIs. However, lots of APIs only appear once among all applications and they are meaningless for detecting malwares. In addition, there are also some APIs which appeared in almost every application. Those APIs are also not meaningful enough to help us pick out the malwares. Therefore, new models are being considered and built. Based on the logic of HinDroid, we try to develop some new matrices to replace the original matrices which will have a faster speed and similar accuracy.
 
+
 #### Reduce API / PACK
 The inspiration of this method comes from the MAMADROID. Instead of using the whole API call, API name and API library have been selected separately. The number of unique API calls for around 2000 applications are originally over 1,000,000. We design two new matrices based on the separation of values in an API call. 
+![api_call](img/api_call.png)
 
 - Reduce API: This matrix only contains the API Name, which is the red part in the example. The new matrix size is around 130,000 x 130,000, which is way smaller than the original A matrix.
 - Reduce Pack: This matrix only contains the API Library, which is the blue part in the example. The new matrix size is around 350,000 x 350,000. The size is about ⅔ smaller than the original A matrix
@@ -74,17 +76,56 @@ Besides Reduce API and Reduce Pack, we are also considering can we select out so
 | Ljava/lang/StringBuilder;-> toString() | 
 | Ljava/lang/Integer;->valueOf() |
 
-#### NEW FEATURES
+#### New Features
 New features are also being considered to build new matrices. We use the return type as our new feature and build a matrix called R. The element in the R matrix represents whether two applications are using the same return type. R matrix can replace the original A matrix and its size is only around 170,000 x 170,000. As the feature description part shown, the return type is also a useful feature to detect malwares. Additionally, in order to build a new kernel for the R matrix, the new B_R matrix represents whether two return types are in the same code block. Therefore, we have two different kernels - RR and RB_RR. 
 
 What’s more, we also built a new I matrix after finishing the API reduction. This also provides more kernel options while putting the features into classifiers.
 
-
 ### Word2Vec
+
+Word2Vec is the new vector embedding we generate. This model is a powerful NLP model to help us find not only the direct relationship between apps but also the cluster connection between apps using the graph, which is a different approach to solve the malware detection problem with HinDroid. 
+ 
+Our Word2Vec takes $AA^t$ as an input and builds a graph based on the $AA^t$. Therefore, the graph contains two components - applications and apis. We then generate sentences as our input for the Word2Vec model. Firstly, we randomly pick an app out, then we follow the path in the graph to search for the next api and app. We will end our path with an app. The length of the path will be a number randomly chosen within the range of maximum length. 
+
+For example, with a maximum length of 5000 and a metapath $AA^t$, the possible text generated will be like:
+
+```
+APP1 -> API234 -> APP34 -> API12 -> APP78 -> …   
+```
+
+After finishing the sentence generating process, we will implement the genism’s Word2vec model to get our vector embeddings for every application and api. The final vector embeddings will be easily used in different machine learning models.  
+
+We use data visualization to check if our model makes sense. Our plot shows the vector embeddings after the dimension reduction using a method called t-SNE(t-distributed stochastic neighbor embedding). This method can project a high dimensional vector into a two dimensional space. t-SNE uses Barnes-Huts approximations to reduce the dimensions. As the graph shown below, the distribution of malwares and benigns are separated. Benigns are condensed at the left side with small x and y values. However, malwares are distributed at the right side, with a large x value and widespread y value. From the information on the graph, the model can detect malwares well. Although a few points are mixed in the graph, they might be separable in higher dimensions.
+
+![word2vec](img/word2vec.png)
 
 ### Node2Vec
 
+The only difference between Node2Vec and Word2Vec is the random walk procedure. This change improves the inability of Word2Vec and tracks the path with no specific rules about where to go. 
+
+We use all A, B, and P matrices to build our Node2Vec. Since the B and P matrices both represent the relationships between apis, we combine the two matrices into one larger matrix to replace the B and P matrices. The values within the large matrix represent whether two apis have some relationships, no matter whether they are within the same code block or use the same package. 
+
+For the probability of random walks, there are three types of probability. For example,from the graph below, we have a path from t -> v. When choosing the next step for v, we have three different probabilities. If we get from v -> t, we have a probability of 1/p. In addition, if the next node from v has a connection with t, then the probability of the node will be 1. Other nodes will have a probability with 1/q. We then implement sentences into the genism’s Node2Vec model. The p value we select in our Node2Vec is 1 and the q value we select is ½. We choose a larger p value since we do not want our path going back to its previous node.
+
+![node2vec_rule](img/node2vec_rule.png)
+
+Similar to Word2Vec, we also plot out the vector embeddings after finishing the dimension reduction. The plot we get is shown below:
+
+![node2vec](img/node2vec.png)
+
 ### Metapath2Vec
+
+Methpath2Vec is an extension of Node2Vec on heterogeneous graphs. The difference between Metapath2Vec and Node2Vec is that the Metapath2Vec assigns a path for the random walk and decides where the next node to go. The Metapath2Vec model uses all A, B, and P matrices. The sampling method of Metapath2Vec is based on the equation (1), which means the next node will be accessed if the edge exists and the node belongs to the correct type. For example, if the path given is ABA, we will generate a sentence from an app to an api first. Then we will check the next node is an api which is in the same code block with the previous api. Finally, our path will go to another app. We repeat this loop until we reach the maximum length we set or have no next node. 
+
+We then implement sentences into the genism’s Word2Vec model. After the dimension reduction process is done, the embedding plot is shown figure below:
+
+$ p(v^{i+1}|v_t^i, P) = \begin{cases}
+    \frac{1}{|N_{t+1}(v_t^i)|},& (v^{i+1},v_t^{i}) \in E, \phi(v^{i+1}) \eq t+1 \\
+    0,              & (v^{i+1},v_t^{i}) \in E, \phi(v^{i+1}) \neq t+1\\
+    0,              &(v^{i+1},v_t^{i})\notin E
+\end{cases}$
+
+![metapath2vec](img/metapath2vec.png)
 
 ### New Model 
 
