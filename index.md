@@ -54,7 +54,7 @@ The four types of matrices are: A, B, P, and I matrices.
 - P matrix also shows the connection between apis. The value within the P matrix shows whether two apis use the same package.
 - I matrix shows the connection within the apis. The value within the I matrix shows whether two apis use the same invoke type.
 
-Currently, due to the large size of the unique apis we get, we are not able to calculate out the I matrix yet. Therefore, the kernel we have now for HinDroid is $AA^t$, $ABA^t$, $APA^t$, and $APBP^tA^t$. Some logic of example kernels are shown below.
+Currently, due to the large size of the unique apis we get, we are not able to calculate out the I matrix yet. Therefore, the kernel we have now for HinDroid is AA, ABA, APA, and APBPA. Some logic of example kernels are shown below.
 
 ### New Model
 The HinDroid model runs pretty slow since there are a large number of APIs. However, lots of APIs only appear once among all applications and they are meaningless for detecting malwares. In addition, there are also some APIs which appeared in almost every application. Those APIs are also not meaningful enough to help us pick out the malwares. Therefore, new models are being considered and built. Based on the logic of HinDroid, we try to develop some new matrices to replace the original matrices which will have a faster speed and similar accuracy.
@@ -85,9 +85,9 @@ What’s more, we also built a new I matrix after finishing the API reduction. T
 
 Word2Vec is the new vector embedding we generate. This model is a powerful NLP model to help us find not only the direct relationship between apps but also the cluster connection between apps using the graph, which is a different approach to solve the malware detection problem with HinDroid. 
  
-Our Word2Vec takes $AA^t$ as an input and builds a graph based on the $AA^t$. Therefore, the graph contains two components - applications and apis. We then generate sentences as our input for the Word2Vec model. Firstly, we randomly pick an app out, then we follow the path in the graph to search for the next api and app. We will end our path with an app. The length of the path will be a number randomly chosen within the range of maximum length. 
+Our Word2Vec takes AA as an input and builds a graph based on the AA. Therefore, the graph contains two components - applications and apis. We then generate sentences as our input for the Word2Vec model. Firstly, we randomly pick an app out, then we follow the path in the graph to search for the next api and app. We will end our path with an app. The length of the path will be a number randomly chosen within the range of maximum length. 
 
-For example, with a maximum length of 5000 and a metapath $AA^t$, the possible text generated will be like:
+For example, with a maximum length of 5000 and a metapath AA, the possible text generated will be like:
 
 ```
 APP1 -> API234 -> APP34 -> API12 -> APP78 -> …   
@@ -105,7 +105,7 @@ The only difference between Node2Vec and Word2Vec is the random walk procedure. 
 
 We use all A, B, and P matrices to build our Node2Vec. Since the B and P matrices both represent the relationships between apis, we combine the two matrices into one larger matrix to replace the B and P matrices. The values within the large matrix represent whether two apis have some relationships, no matter whether they are within the same code block or use the same package. 
 
-For the probability of random walks, there are three types of probability. For example,from the graph below, we have a path from t -> v. When choosing the next step for v, we have three different probabilities. If we get from v -> t, we have a probability of 1/p. In addition, if the next node from v has a connection with t, then the probability of the node will be 1. Other nodes will have a probability with 1/q. We then implement sentences into the genism’s Node2Vec model. The p value we select in our Node2Vec is 1 and the q value we select is ½. We choose a larger p value since we do not want our path going back to its previous node.
+For the probability of random walks, there are three types of probability. For example,from the graph below, we have a path from t -> v. When choosing the next step for v, we have three different probabilities. If we get from v -> t, we have a probability of 1/p. In addition, if the next node from v has a connection with t, then the probability of the node will be 1. Other nodes will have a probability with 1/q. We then implement sentences into the genism’s Node2Vec model. The p value we select in our Node2Vec is 1 and the q value we select is 1/2. We choose a larger p value since we do not want our path going back to its previous node.
 
 ![node2vec_rule](img/node2vec_rule.png)
 
@@ -119,13 +119,9 @@ Methpath2Vec is an extension of Node2Vec on heterogeneous graphs. The difference
 
 We then implement sentences into the genism’s Word2Vec model. After the dimension reduction process is done, the embedding plot is shown figure below:
 
-$ p(v^{i+1}|v_t^i, P) = \begin{cases}
-    \frac{1}{|N_{t+1}(v_t^i)|},& (v^{i+1},v_t^{i}) \in E, \phi(v^{i+1}) \eq t+1 \\
-    0,              & (v^{i+1},v_t^{i}) \in E, \phi(v^{i+1}) \neq t+1\\
-    0,              &(v^{i+1},v_t^{i})\notin E
-\end{cases}$
+![equation](img/equation.png)
 
-![metapath2vec](img/metapath2vec.png)
+![metapath2vec](img/mepath2vec.png)
 
 ### New Model 
 
@@ -138,6 +134,8 @@ After different models are built, SVM(Support-Vector Machines), Random Forest, a
 The classifier with highest accuracy will be chosen as the classifier of a specific model. As the result table shows, most classifiers will be SVM. However, the Node2vec model shows a preference on Gradient Boosting.
 
 ### Result Table
+As the tables show below, train accuracy, test accuracy, and F1 score are the values to evaluate the performance of the model. We also include False Positive and True Negative count to check which kind of error will the model make. The best performance is the original HinDroid model with AA kernel and SVM classifier, which achieves a test accuracy around 99% with only three benigns misrecognized as malwares. 
+
 
 ### Research on misclassified applications
 After seeing the result, we do some research on the misrecognized applications. As the table shown, the original HinDroid model with metapath AA and classifier SVM only missed 3 applications. Those three applications are considered to be False Positive, which means that they should be benigns but identified as malwares. We select those 3 applications out and find that they are all in the category Random application. By checking the features used for malware detection and comparing it with the 25% - 75% range for both malwares and benigns, those applications are at the boundary of malwares and benigns. Therefore, it is reasonable for the classifier to misrecognizing those applications. In addition, as the Data Description section mentioned, random applications are selected randomly out of apkpure. There is a small possibility that those three applications are actually malwares.
