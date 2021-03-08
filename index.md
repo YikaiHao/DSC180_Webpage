@@ -111,7 +111,7 @@ For the probability of random walks, there are three types of probability. For e
 
 Similar to Word2Vec, we also plot out the vector embeddings after finishing the dimension reduction. The plot we get is shown below:
 
-![node2vec](img/node2vec.png)
+![node2vec](img/nod2vec.png)
 
 ### Metapath2Vec
 
@@ -123,7 +123,6 @@ We then implement sentences into the genism’s Word2Vec model. After the dimens
 
 ![metapath2vec](img/mepath2vec.png)
 
-### New Model 
 
 ## Result 
 Below are the results of different models. 
