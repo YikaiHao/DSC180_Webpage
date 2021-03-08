@@ -1,3 +1,4 @@
+# Malware Detection
 Authors: [**Yikai Hao**](https://github.com/YikaiHao), [**Yu-Chieh Chen**](https://github.com/yuc399), [**Ruoyu Liu**](https://github.com/rul141)
 
 [Check on GitHub Repo](https://github.com/YikaiHao/DSC180_Winter)
@@ -25,6 +26,15 @@ In order to check whether the features we generate are useful for checking malwa
 As we can see from the graphs, the distribution of every application type for every feature is different.
 
 ### Hindroid 
+HinDroid is the baseline model we use for our report. It contains different types of kernels and the meaning behind each kernel is different. It uses the features we extract from the data generating process to build some matrices. Each matrix shows a type of relationship between apis or applications. Each matrix is an adjacent matrix for a graph with a specialized relationship. By choosing different types of matrices we want to combine together, we get the kernel we have. Then we will be able to use the custom kernels and put in different classifiers like SVM or Random Forest for malware detection. 
+
+The four types of matrices are: A, B, P, and I matrices. 
+- A matrix shows the connection among apis and applications. The value within the A matrix will be one if the application contains the api.
+- B matrix shows the connection between apis. The value within the B matrix shows whether two apis are contained in the same code block.
+- P matrix also shows the connection between apis. The value within the P matrix shows whether two apis use the same package.
+- I matrix shows the connection within the apis. The value within the I matrix shows whether two apis use the same invoke type.
+
+Currently, due to the large size of the unique apis we get, we are not able to calculate out the I matrix yet. Therefore, the kernel we have now for HinDroid is AA^t, ABA^t, APA^t, and APBP^tA^t. 
 
 ### New Model
 
