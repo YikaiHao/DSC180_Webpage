@@ -135,6 +135,8 @@ The classifier with highest accuracy will be chosen as the classifier of a speci
 ### Result Table
 As the tables show below, train accuracy, test accuracy, and F1 score are the values to evaluate the performance of the model. We also include False Positive and True Negative count to check which kind of error will the model make. The best performance is the original HinDroid model with AA kernel and SVM classifier, which achieves a test accuracy around 99% with only three benigns misrecognized as malwares. 
 
+#### Hindroid Statistics
+
 | Model           | Kernel  | Classifier        | TrainAcc | TestAcc | F1     | FP | FN |
 |-----------------|---------|-------------------|----------|---------|--------|----|----|
 | HinDroid        | AA      | SVM               | 1        | 0.9917  | 0.9919 | 3  | 0  |
@@ -161,6 +163,7 @@ As the tables show below, train accuracy, test accuracy, and F1 score are the va
 | API Return Type | RR      | SVM               | 1        | 0.9862  | 0.9867 | 5  | 0  |
 |                 | RBR     | Gradient Boosting | 0.9896   | 0.9282  | 0.9319 | 19 | 7  |
 
+#### Graph Statistics
 
 | Model        | Metapath | Classifier        | TrainAcc | TestAcc | F1     | FP | FN |
 |--------------|----------|-------------------|----------|---------|--------|----|----|
