@@ -135,10 +135,53 @@ The classifier with highest accuracy will be chosen as the classifier of a speci
 
 ### Result Table
 As the tables show below, train accuracy, test accuracy, and F1 score are the values to evaluate the performance of the model. We also include False Positive and True Negative count to check which kind of error will the model make. The best performance is the original HinDroid model with AA kernel and SVM classifier, which achieves a test accuracy around 99% with only three benigns misrecognized as malwares. 
+| Model           | Kernel  | Classifier        | TrainAcc | TestAcc | F1     | FP | FN |
+|-----------------|---------|-------------------|----------|---------|--------|----|----|
+| HinDroid        | AA      | SVM               | 1        | 0.9917  | 0.9919 | 3  | 0  |
+|                 | ABA     | Gradient Boosting | 0.9917   | 0.9419  | 0.944  | 13 | 8  |
+|                 | APA     | SVM               | 1        | 0.9779  | 0.9788 | 8  | 0  |
+|                 | APBPA   | Random Forest     | 1        | 0.9337  | 0.9358 | 14 | 10 |
+| Reduce API Name | AA      | SVM               | 1        | 0.9834  | 0.9839 | 5  | 1  |
+|                 | ABA     | Random Forest     | 1        | 0.9419  | 0.9442 | 14 | 7  |
+| Reduce API Pack | AA      | SVM               | 1        | 0.9889  | 0.9893 | 4  | 0  |
+|                 | ABA     | Gradient Boosting | 0.9965   | 0.9419  | 0.9415 | 17 | 4  |
+| TF-IDF 1000     | AA      | SVM               | 1        | 0.9861  | 0.9865 | 2  | 3  |
+|                 | AIA     | Random Forest     | 1        | 0.9143  | 0.916  | 14 | 17 |
+| TF-IDF 2000     | AA      | SVM               | 1        | 9,917   | 0.9919 | 2  | 1  |
+|                 | ABA     | Random Forest     | 1        | 0.9475  | 0.9493 | 12 | 7  |
+|                 | APA     | SVM               | 1        | 0.9834  | 0.9839 | 5  | 1  |
+|                 | APBPA   | Decision Tree     | 1        | 0.9309  | 0.9326 | 13 | 12 |
+|                 | ABPBA   | SVM               | 1        | 0.9806  | 0.9812 | 5  | 2  |
+|                 | AIA     | Random Forest     | 1        | 0.9198  | 0.923  | 18 | 11 |
+|                 | ABPIPBA | Gradient Boosting | 0.9261   | 0.9088  | 0.9133 | 22 | 11 |
+| TF-IDF 5000     | AA      | SVM               | 1        | 0.9889  | 0.9892 | 3  | 1  |
+|                 | AIA     | Gradient Boosting | 0.9488   | 0.9198  | 0.9238 | 20 | 9  |
+| TF-IDF 10000    | AA      | SVM               | 1        | 0.989   | 0.9892 | 3  | 1  |
+|                 | AIA     | Gradient Boosting | 0.9537   | 0.9171  | 0.9215 | 21 | 9  |
+| API Return Type | RR      | SVM               | 1        | 0.9862  | 0.9867 | 5  | 0  |
+|                 | RBR     | Gradient Boosting | 0.9896   | 0.9282  | 0.9319 | 19 | 7  |
 
+
+| Model        | Metapath | Classifier        | TrainAcc | TestAcc | F1     | FP | FN |
+|--------------|----------|-------------------|----------|---------|--------|----|----|
+| Word2Vec     | AA       | Gradient Boosting | 0.9993   | 0.9475  | 0.9501 | 15 | 4  |
+| Node2Vec     | AA       | Random Forest     | 1        | 0.942   | 0.944  | 13 | 8  |
+|              | All      | Gradient Boosting | 0.9965   | 0.9475  | 0.9501 | 15 | 4  |
+| Metapath2Vec | AA       | Gradient Boosting | 0.9717   | 0.9448  | 0.9465 | 12 | 8  |
+|              | ABA      | Gradient Boosting | 0.9869   | 0.9337  | 0.9371 | 18 | 6  |
+|              | APA      | Gradient Boosting | 0.9931   | 0.9448  | 0.9474 | 15 | 5  |
 
 ### Research on misclassified applications
 After seeing the result, we do some research on the misrecognized applications. As the table shown, the original HinDroid model with metapath AA and classifier SVM only missed 3 applications. Those three applications are considered to be False Positive, which means that they should be benigns but identified as malwares. We select those 3 applications out and find that they are all in the category Random application. By checking the features used for malware detection and comparing it with the 25% - 75% range for both malwares and benigns, those applications are at the boundary of malwares and benigns. Therefore, it is reasonable for the classifier to misrecognizing those applications. In addition, as the Data Description section mentioned, random applications are selected randomly out of apkpure. There is a small possibility that those three applications are actually malwares.
+
+|             | # of Unique API (Lib + Name) | # of Unique API Name | # of Unique Api Pack | # of Unique Return Types |
+|-------------|------------------------------|----------------------|----------------------|--------------------------|
+| Missed APP1 | 4064                         | 2001                 | 1281                 | 728                      |
+| Missed APP2 | 2346                         | 1068                 | 729                  | 429                      |
+| Missed APP3 | 2270                         | 1035                 | 683                  | 413                      |
+| Benign      | 4062-9851                    | 1395-3602            | 1446-3667            | 884-2069                 |
+| Malware     | 96-1224                      | 71-174               | 38-433               | 34-276                   |
+
 
 ## Conclusion 
 In this report, we implement different methods for malware detection. Based on the weakness we find in using HinDroid, we also design some new matrices and kernels in order to save space and time. As the result section shows, the outcome is positive. With a much smaller matrix and time complexity, the new model can perform as well as the original HinDroid model. Although graph-based models do not perform as well as kernel based models, they are achieving a high accuracy around 95%. Graph is still a useful strategy to consider while detecting malwares since it can catch the cluster relationship among applications.
