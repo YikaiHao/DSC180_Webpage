@@ -12,7 +12,7 @@ The data source is called Android Malware Dataset (AMD). The dataset is publishe
 
 ### Smali 
 In order to analyze the smali files, we should understand the structure of it. Therefore, here is the description of the smali files and the features contained in the smali files.
-[smali_example](img/smali_file.png)
+![smali_example](img/smali_file.png)
 
 
 ### API Calls
