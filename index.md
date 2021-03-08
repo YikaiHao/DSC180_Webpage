@@ -17,6 +17,7 @@ In order to analyze the smali files, we should understand the structure of it. T
 
 ### API Calls
 In order to understand which part of the smali files do the malicious action, we put our attention on API (Application Programming Interface) calls. There are four main components in an API call.
+![smali_example](img/API.png)
 
 ### Database 
 We design a new database for storing data.
