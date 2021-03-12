@@ -1,0 +1,43 @@
+body, html {
+    font: 20px Montserrat, sans-serif;
+    line-height: 1.8;
+    height: 100%;
+    font-size: 18px;
+    color: #515859;
+}
+nav.navbar, #contact{
+    font-size: 16px;
+    letter-spacing: 5px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #F5F6F7;
+}
+.navbar-light .navbar-brand {
+    color: #616A6B;
+}
+a {
+    color: #616A6B;
+}
+a:hover{
+    color: #4a6cdb;
+}
+table {
+    border-collapse: collapse;
+  }
+  
+td, th {
+    border: 1px solid #999;
+    padding: 0.5rem;
+    text-align: center;
+}
+div{
+    padding-top: 10px;
+}
+h1{
+    color:#468BC1;
+}
+h2{
+    color:#549DD7;
+}
